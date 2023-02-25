@@ -1,16 +1,25 @@
-# This is a sample Python script.
+import shutil
+from typing import List
+from fastapi import FastAPI, UploadFile, File
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+app = FastAPI()
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+@app.post("/")
+async def root(file: UploadFile = File(...)):
+    with open(f"anton_{file.filename}", "wb") as bufer:
+        shutil.copyfileobj(file.file, bufer)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    return {"file_name": file.filename}
+
+
+@app.post("/img")
+async def import_img(files: list[UploadFile] = File(...)):
+    for img in files:
+        with open(
+            f"/home/anton/PycharmProjects/FastAPI/output_file/anton_{img.filename}",
+            "wb",
+        ) as bufer:
+            shutil.copyfileobj(img.file, bufer)
+
+    return {"file_name": "Good"}
