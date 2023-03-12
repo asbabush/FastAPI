@@ -1,10 +1,11 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
+import datetime
 
 
 class User(BaseModel):
-    user_id: int
-    user_name: str
+    id: int
+    username: str
 
 
 class UploadVideo(BaseModel):
